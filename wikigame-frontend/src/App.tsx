@@ -9,7 +9,6 @@ function App() {
   const apiCall = {
     url: 'https://ja.wikipedia.org/wiki/%E3%83%A9%E3%83%B3%E3%83%80%E3%83%A0'
   }
-  let test = ''
   useEffect(() => {
     webSocket.current = new WebSocket("ws://localhost:80/");
     webSocket.current.onopen = () => {console.log('open');webSocket.current?.send(JSON.stringify(apiCall))}
