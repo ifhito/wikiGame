@@ -10,12 +10,15 @@ serve((request) => {
     // この`socket`変数はクライアント側のWebSocketオブジェクトと同様に扱える
     const { socket, response } = Deno.upgradeWebSocket(request);
   
-    socket.onopen = () => {
+    socket.onopen = async () => {
+      const res = await fetch('http://ja.wikipedia.org/wiki/Special:Randompage');
+      const html = await res.text();
+      socket.send(JSON.stringify(html));
     };
     socket.onmessage = async (e) => {
-        const data = JSON.parse(e.data)
-        console.log(data)
-      const res = await fetch(data.url);
+      const data = JSON.parse(e.data)
+      console.log(data)
+      const res = await fetch(`https://ja.wikipedia.org/wiki/${data.title}`);
       const html = await res.text();
       console.log(data.url)
       socket.send(JSON.stringify(html));
